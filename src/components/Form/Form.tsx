@@ -1,10 +1,14 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { countries } from "../../data/countries";
-import styles from "./Form.module.css";
 import { SearchType } from "../../types";
+import styles from "./Form.module.css";
 import Alert from "../Alert/Alert";
 
-function Form() {
+type FormProps = {
+  fetchWeather: (search: SearchType) => Promise<void>;
+};
+
+function Form({ fetchWeather }: FormProps) {
   const [search, setSearch] = useState<SearchType>({
     city: "",
     country: "",
@@ -28,6 +32,8 @@ function Form() {
       setAlert("All fields are required");
       return;
     }
+
+    fetchWeather(search);
   };
 
   return (
