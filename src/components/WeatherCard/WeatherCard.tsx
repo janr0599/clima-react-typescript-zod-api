@@ -1,5 +1,6 @@
 import { Weather } from "../../hooks/useWeather";
 import { formatTemperature } from "../../helpers";
+import styles from "./WeatherCard.module.css";
 
 type WeatherCardProps = {
   weather: Weather;
@@ -7,10 +8,12 @@ type WeatherCardProps = {
 
 function WeatherCard({ weather }: WeatherCardProps) {
   return (
-    <div>
+    <div className={styles.container}>
       <h2>Weather in: {weather.name}</h2>
-      <p>Current temperature: {formatTemperature(weather.main.temp)}&deg;C</p>
-      <div className="">
+      <p className={styles.current}>
+        {formatTemperature(weather.main.temp)}&deg;C
+      </p>
+      <div className={styles.temperatures}>
         <p>
           Min. temperature:{" "}
           <span>{formatTemperature(weather.main.temp_min)}&deg;C</span>
