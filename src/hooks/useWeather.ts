@@ -49,7 +49,7 @@ export const useWeather = () => {
     setWeather(initialState); // reset the state to its initial value so that the component unmounts and does not overlap with the spinner when a new request is made
     try {
       const appID = import.meta.env.VITE_API_KEY;
-      const geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appID}`;
+      const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appID}`;
 
       const { data } = await axios(geoUrl);
 
