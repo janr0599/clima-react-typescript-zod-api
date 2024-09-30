@@ -29,25 +29,35 @@ const WeatherSchema = z.object({
 
 export type Weather = z.infer<typeof WeatherSchema>;
 
-export const useWeather = () => {
-  const [weather, setWeather] = useState<Weather>({
-    name: "",
-    main: {
-      temp: 0,
-      temp_max: 0,
-      temp_min: 0,
-    },
-  });
+const initialState = {
+  name: "",
+  main: {
+    temp: 0,
+    temp_max: 0,
+    temp_min: 0,
+  },
+};
 
+export const useWeather = () => {
+  const [weather, setWeather] = useState<Weather>(initialState);
   const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const fetchWeather = async (search: SearchType) => {
     setLoading(true);
+    setNotFound(false);
+    setWeather(initialState); // reset the state to its initial value so that the component unmounts and does not overlap with the spinner when a new request is made
     try {
       const appID = import.meta.env.VITE_API_KEY;
       const geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${search.city},${search.country}&appid=${appID}`;
 
       const { data } = await axios(geoUrl);
+
+      if (!data[0]) {
+        setNotFound(true);
+        return;
+      }
+
       const lat = data[0].lat;
       const lon = data[0].lon;
 
@@ -73,6 +83,7 @@ export const useWeather = () => {
 
       const { data: weatherResult } = await axios(weatherUrl);
       const result = WeatherSchema.safeParse(weatherResult);
+
       if (result.success) {
         setWeather(result.data);
       } else {
@@ -92,5 +103,6 @@ export const useWeather = () => {
     weather,
     hasWeatherData,
     loading,
+    notFound,
   };
 };

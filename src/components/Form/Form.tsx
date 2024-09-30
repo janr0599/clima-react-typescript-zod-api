@@ -38,7 +38,7 @@ function Form({ fetchWeather }: FormProps) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      {alert && <Alert alert={alert} />}
+      {alert && <Alert>{alert}</Alert>}
 
       <div className={styles.field}>
         <label htmlFor="city">City:</label>
